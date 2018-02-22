@@ -33,8 +33,18 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
         
-      # run tests!
-      - run: gradle build test testVersionCompatibility
+      # run build and unit tests
+      - run: gradle build test
 
+      # store built libraries, reports, and test results
+      - store_artifacts:
+          path: ~/repo/build/libs
 
+      - store_artifacts:
+          path: ~/repo/build/reports
 
+      - store_artifacts:
+          path: ~/repo/build/test-results
+
+      # run the much longer compatibility tests
+      - run: gradle testVersionCompatibility
